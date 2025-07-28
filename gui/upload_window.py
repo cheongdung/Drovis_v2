@@ -1,6 +1,13 @@
 import os
+import sys
+
+# Qt 플랫폼 환경변수
 os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = r"C:\Users\김민경\OneDrive\바탕 화면\Proj_drovis\Drovis_v2-main\venv\Lib\site-packages\PyQt5\Qt5\plugins\platforms"
 
+# 현재 경로 기반으로 상위 폴더 추가
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(CURRENT_DIR)
+sys.path.append(PARENT_DIR)
 
 
 # gui/main_window.py
@@ -19,7 +26,8 @@ from PyQt5.QtWidgets import (
     QMessageBox,
 )
 
-from PyQt5.QtWidgets import QWidget
+from gui.history_window import HistoryWindow  # ← history 창 임포트
+
 
 class UploadWindow(QWidget):
     def __init__(self, username):
@@ -27,11 +35,16 @@ class UploadWindow(QWidget):
         self.setWindowTitle("Drovis - 영상 분석")
         self.resize(1000, 600)
         self.file_path = None
+
+        self.history_window = None  # history 창 핸들
+        self.username = username
+
         self.setup_ui()
 
     def setup_ui(self):
         layout = QVBoxLayout()
 
+        #영상 업로드 영역
         upload_layout = QHBoxLayout()
         self.upload_btn = QPushButton("영상 업로드")
         self.upload_btn.clicked.connect(self.upload_file)
@@ -40,10 +53,17 @@ class UploadWindow(QWidget):
         upload_layout.addWidget(self.file_label)
         layout.addLayout(upload_layout)
 
+        #분석 시작 버튼
         self.analyze_btn = QPushButton("분석 시작")
         self.analyze_btn.clicked.connect(self.start_analysis)
         layout.addWidget(self.analyze_btn)
 
+        #기록 보기 버튼
+        self.history_btn = QPushButton("분석 기록 보기")
+        self.history_btn.clicked.connect(self.open_history_window)
+        layout.addWidget(self.history_btn)
+
+        #분석 결과 테이블
         self.result_table = QTableWidget()
         self.result_table.setColumnCount(4)
         self.result_table.setHorizontalHeaderLabels(
@@ -55,7 +75,7 @@ class UploadWindow(QWidget):
 
     def upload_file(self):
         file_path, _ = QFileDialog.getOpenFileName(
-            self, "영상 선택", "", "Video Files (*.mp4 *.avi)"
+            self, "영상 선택", "", "Video Files (*.mp4 *.avi *.mov)"
         )
         if file_path:
             self.file_path = file_path
@@ -77,14 +97,14 @@ class UploadWindow(QWidget):
 
         row = self.result_table.rowCount()
         self.result_table.insertRow(row)
-        self.result_table.setItem(
-            row, 0, QTableWidgetItem(os.path.basename(self.file_path))
-        )
+        self.result_table.setItem(row, 0, QTableWidgetItem(os.path.basename(self.file_path)))
         self.result_table.setItem(row, 1, QTableWidgetItem("완료"))
         self.result_table.setItem(row, 2, QTableWidgetItem(result))
-        self.result_table.setItem(
-            row, 3, QTableWidgetItem(datetime.now().strftime("%Y-%m-%d %H:%M"))
-        )
+        self.result_table.setItem(row, 3, QTableWidgetItem(datetime.now().strftime("%Y-%m-%d %H:%M")))
+
+    def open_history_window(self):
+        self.history_window = HistoryWindow()
+        self.history_window.show()
 
 
 # 단독 실행용
@@ -100,7 +120,7 @@ if __name__ == "__main__":
     with open(qss_path, "r", encoding="utf-8") as f:
         app.setStyleSheet(f.read())
 
-    window = MainWindow()
+    window = UploadWindow()
     window.show()
     sys.exit(app.exec_())
 
