@@ -1,5 +1,7 @@
 import os
 import sys
+import json
+
 
 # Qt 플랫폼 환경변수
 os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = r"C:\Users\김민경\OneDrive\바탕 화면\Proj_drovis\Drovis_v2-main\venv\Lib\site-packages\PyQt5\Qt5\plugins\platforms"
@@ -103,9 +105,39 @@ class UploadWindow(QWidget):
         self.result_table.setItem(row, 2, QTableWidgetItem(result))
         self.result_table.setItem(row, 3, QTableWidgetItem(datetime.now().strftime("%Y-%m-%d %H:%M")))
 
+        # 분석 기록 저장
+        history_item = {
+            "filename": os.path.basename(self.file_path),
+            "result": result,
+            "confidence": round(random.uniform(0.7, 0.99), 2),
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "description": "AI 자동 분석 결과"
+        }
+
+        history_file = "data/history.json"
+        history = []
+
+        # 기존 기록 불러오기
+        if os.path.exists(history_file):
+            with open(history_file, "r", encoding="utf-8") as f:
+                try:
+                    history = json.load(f)
+                except json.JSONDecodeError:
+                    history = []
+
+        # 새 기록 추가
+        history.append(history_item)
+
+        # 기록 저장
+        os.makedirs(os.path.dirname(history_file), exist_ok=True)  # 폴더 없으면 생성
+        with open(history_file, "w", encoding="utf-8") as f:
+            json.dump(history, f, ensure_ascii=False, indent=2)
+
+
     def open_history_window(self):
-        self.history_window = HistoryWindow()
+        self.history_window = HistoryWindow(username=self.username)  # ← username 전달!
         self.history_window.show()
+
 
 
 # 단독 실행용

@@ -7,7 +7,7 @@ import json
 import os
 
 class HistoryWindow(QWidget):
-    def __init__(self, history_file="data/history.json"):
+    def __init__(self, username=None, history_file="data/history.json"):
         super().__init__()
         self.setWindowTitle("분석 기록")
         self.setGeometry(300, 200, 700, 500)
@@ -24,10 +24,20 @@ class HistoryWindow(QWidget):
 
         # 테이블 위젯 생성
         self.table = QTableWidget()
-        self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(["파일명", "위험도", "신뢰도", "날짜", "설명"])
+        self.table.setColumnCount(4)
+        self.table.setHorizontalHeaderLabels(["파일명", "위험도", "신뢰도", "날짜"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         layout.addWidget(self.table)
+
+        # 뒤로가기 버튼
+        btn_back = QPushButton("뒤로 가기")
+        btn_back.clicked.connect(self.go_back_to_upload)
+        layout.addWidget(btn_back)
+
+        # 로그아웃 버튼
+        btn_logout = QPushButton("로그아웃")
+        btn_logout.clicked.connect(self.logout_to_main)
+        layout.addWidget(btn_logout)
 
         # 버튼 영역
         btn_close = QPushButton("닫기")
@@ -57,7 +67,7 @@ class HistoryWindow(QWidget):
             self.table.setItem(row, 1, self.make_colored_item(item["result"]))
             self.table.setItem(row, 2, QTableWidgetItem(f'{item["confidence"] * 100:.1f}%'))
             self.table.setItem(row, 3, QTableWidgetItem(item["timestamp"]))
-            self.table.setItem(row, 4, QTableWidgetItem(item["description"]))
+
 
     def make_colored_item(self, level):
         item = QTableWidgetItem(level)
@@ -79,6 +89,19 @@ class HistoryWindow(QWidget):
                 os.remove(self.history_file)
             self.table.setRowCount(0)
             QMessageBox.information(self, "삭제됨", "기록이 삭제되었습니다.")
+
+    def go_back_to_upload(self):
+        from gui.upload_window import UploadWindow  # 순환 import 방지용
+        self.upload_window = UploadWindow(username=self.username)
+        self.upload_window.show()
+        self.close()
+
+    def logout_to_main(self):
+        from gui.main_window import MainWindow  # 순환 import 방지용
+        self.main_window = MainWindow()
+        self.main_window.show()
+        self.close()
+
 if __name__ == "__main__":
     import sys
     from PyQt5.QtWidgets import QApplication
