@@ -1,43 +1,129 @@
-/* 전체 배경과 폰트 */
-QWidget {
-    background-color: #f2f4f8;
-    font-family: "Malgun Gothic", sans-serif;
-    font-size: 16px;
+/* 배경 및 메인 폰트 */
+QMainWindow, QWidget {
+    background: #f5f7fa;
+    font-family: 'Segoe UI', '맑은 고딕', Arial, sans-serif;
+    color: #2e3440;
+    font-size: 15px;
 }
 
-/* 라벨 */
-QLabel {
-    color: #333;
-    font-weight: 600;
-}
-
-/* 입력창 */
-QLineEdit {
-    background-color: #ffffff;
-    border: 1px solid #cccccc;
-    border-radius: 8px;
-    padding: 10px;
-}
-
-QLineEdit:focus {
-    border: 1px solid #0078d7;
-    background-color: #e6f0ff;
-}
-
-/* 버튼 */
+/* 버튼 — 은은한 파스텔블루와 부드러운 그림자 */
 QPushButton {
-    background-color: #0078d7;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #eaf1ff, stop:1 #cae0fc);
+    color: #274d79;
+    border-radius: 7px;
+    padding: 8px 20px;
     font-weight: bold;
+    border: 1.5px solid #b6cbdd;
+    box-shadow: 0 1px 6px rgba(160,180,220,0.11);
+    transition: background 0.2s;
 }
-
 QPushButton:hover {
-    background-color: #005aab;
+    background-color: #daeaff;
+    color: #153b73;
+    border: 1.5px solid #8ab3e7;
+}
+QPushButton:pressed {
+    background-color: #b7cdf6;
 }
 
-QPushButton:pressed {
-    background-color: #00407a;
+/* 입력창 — 미묘한 광택 표현, 포커스 시 은은한 파란 라인 */
+QLineEdit, QPlainTextEdit, QTextEdit {
+    background: #fff;
+    border: 1.5px solid #dae4ee;
+    border-radius: 6px;
+    padding: 7px 12px;
+    color: #263346;
+}
+QLineEdit:focus, QPlainTextEdit:focus, QTextEdit:focus {
+    border: 1.5px solid #60aaff;
+    background: #f6fbff;
+}
+
+/* 라벨/텍스트 */
+QLabel {
+    color: #25415b;
+    font-size: 15px;
+}
+
+/* 테이블 — 부드럽고 입체감 있는 컬럼헤더, 짙지 않은 줄선 */
+QTableView, QTableWidget {
+    background: #fafdff;
+    border: 1.3px solid #dbe3ef;
+    border-radius: 8px;
+    gridline-color: #e4e9f2;
+}
+QHeaderView::section {
+    background: #e8eff8;
+    color: #29466b;
+    border: none;
+    font-weight: 600;
+    height: 30px;
+    padding-left: 10px;
+    border-radius: 9px 9px 0 0;
+    margin-bottom:2px;
+    box-shadow: 0 2px 3px #eee;
+}
+QTableWidget::item:selected, QTableView::item:selected {
+    background: #c9e1fb;
+    color: #102943;
+}
+QTableWidget::item {
+    padding: 8px;
+}
+
+/* 콤보박스 */
+QComboBox {
+    border: 1.5px solid #ccd7e4;
+    border-radius: 6px;
+    background: #fff;
+    padding: 7px 16px 7px 10px;
+}
+QComboBox:focus {
+    border: 1.5px solid #6db6fa;
+}
+
+/* 스크롤바 — 밝고 가느다란 */
+QScrollBar:vertical {
+    border: none;
+    background: #f3f7fa;
+    width: 9px;
+    border-radius: 4px;
+}
+QScrollBar::handle:vertical {
+    background: #c3d4ec;
+    min-height: 20px;
+    border-radius: 5px;
+}
+QScrollBar::handle:vertical:hover {
+    background: #90b8e6;
+}
+
+/* 그룹박스 — 라운드+미묘한 음영 */
+QGroupBox {
+    border: 1.3px solid #b9cadb;
+    border-radius: 11px;
+    margin-top: 13px;
+    background: #fbfcfe;
+}
+QGroupBox:title {
+    subcontrol-origin: margin;
+    left: 14px;
+    top: -8px;
+    color: #4e81be;
+    background: transparent;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 1px 6px;
+}
+
+/* 메시지 박스 */
+QMessageBox {
+    background: #f9fbfe;
+    font-size: 15px;
+}
+
+/* 비활성 위젯 */
+QWidget:disabled {
+    color: #a6b3c5;
 }

@@ -17,9 +17,9 @@ from gui.register_window import RegisterWindow
 
 # stylesheet 구성
 def load_stylesheet():
-    qss_path = os.path.join(os.path.dirname(__file__), "style.qss")
+    qss_path = os.path.join(os.path.dirname(__file__), "styles.qss")
     if os.path.exists(qss_path):
-        with open(qss_path, "r") as f:
+        with open(qss_path, "r", encoding="utf-8") as f:
             return f.read()
     return ""
 

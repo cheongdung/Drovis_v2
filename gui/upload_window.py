@@ -32,7 +32,7 @@ from gui.history_window import HistoryWindow  # ← history 창 임포트
 
 
 class UploadWindow(QWidget):
-    def __init__(self, username):
+    def __init__(self, username="guest"):
         super().__init__()
         self.setWindowTitle("Drovis - 영상 분석")
         self.resize(1000, 600)
@@ -71,6 +71,7 @@ class UploadWindow(QWidget):
         self.result_table.setHorizontalHeaderLabels(
             ["파일명", "상태", "유사도 결과", "시간"]
         )
+        self.result_table.setSortingEnabled(True)
         layout.addWidget(self.result_table)
 
         self.setLayout(layout)
