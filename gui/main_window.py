@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QLabel,
     QPushButton, QVBoxLayout
 )
+from PyQt5.QtCore import Qt # 중앙정렬
 
 # 경로 문제 해결: 상위 경로에 Drovis_v2 등록
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -13,6 +14,15 @@ sys.path.append(PARENT_DIR)
 # 다른 창 import (Drovis_v2/gui/upload_window.py 등)
 from gui.login_window import LoginWindow
 from gui.register_window import RegisterWindow
+
+# stylesheet 구성
+def load_stylesheet():
+    qss_path = os.path.join(os.path.dirname(__file__), "style.qss")
+    if os.path.exists(qss_path):
+        with open(qss_path, "r") as f:
+            return f.read()
+    return ""
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -57,6 +67,7 @@ class MainWindow(QMainWindow):
 # 단독 실행 시 진입점
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setStyleSheet(load_stylesheet())   # 스타일시트 적용 
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())
