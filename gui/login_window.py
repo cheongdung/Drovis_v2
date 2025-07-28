@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-asdfdjhfkjafhdasjdf
-=======
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox
 from PyQt5.QtCore import QFile, QTextStream

@@ -1,0 +1,43 @@
+/* 전체 배경과 폰트 */
+QWidget {
+    background-color: #f2f4f8;
+    font-family: "Malgun Gothic", sans-serif;
+    font-size: 16px;
+}
+
+/* 라벨 */
+QLabel {
+    color: #333;
+    font-weight: 600;
+}
+
+/* 입력창 */
+QLineEdit {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+QLineEdit:focus {
+    border: 1px solid #0078d7;
+    background-color: #e6f0ff;
+}
+
+/* 버튼 */
+QPushButton {
+    background-color: #0078d7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #005aab;
+}
+
+QPushButton:pressed {
+    background-color: #00407a;
+}
