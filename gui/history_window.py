@@ -24,8 +24,8 @@ class HistoryWindow(QWidget):
 
         # 테이블 위젯 생성
         self.table = QTableWidget()
-        self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(["파일명", "위험도", "신뢰도", "날짜", "설명"])
+        self.table.setColumnCount(4)
+        self.table.setHorizontalHeaderLabels(["파일명", "위험도", "신뢰도", "날짜"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         layout.addWidget(self.table)
 
@@ -57,7 +57,7 @@ class HistoryWindow(QWidget):
             self.table.setItem(row, 1, self.make_colored_item(item["result"]))
             self.table.setItem(row, 2, QTableWidgetItem(f'{item["confidence"] * 100:.1f}%'))
             self.table.setItem(row, 3, QTableWidgetItem(item["timestamp"]))
-            self.table.setItem(row, 4, QTableWidgetItem(item["description"]))
+
 
     def make_colored_item(self, level):
         item = QTableWidgetItem(level)
