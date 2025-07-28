@@ -5,7 +5,7 @@ def create_analysis_table():
     conn = get_analysis_connection()
     cur = conn.cursor()
     cur.execute("""
-        CREATE TABLE analysis (
+        CREATE TABLE IF NOT EXISTS analysis (
 			    id INTEGER PRIMARY KEY AUTOINCREMENT,
 			    user_id TEXT NOT NULL,
 			    filename TEXT NOT NULL,
