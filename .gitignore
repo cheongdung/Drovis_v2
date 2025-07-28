@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+*.sqlite3
+.vscode/
+database/*.db
+# uploads 추후 추가
