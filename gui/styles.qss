@@ -43,7 +43,7 @@ QLineEdit:focus, QPlainTextEdit:focus, QTextEdit:focus {
 /* 라벨/텍스트 */
 QLabel {
     color: #25415b;
-    font-size: 40px;
+    font-size: 20px;
     font-weight: bold;
 }
 
