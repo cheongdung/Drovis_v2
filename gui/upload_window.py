@@ -19,9 +19,10 @@ from PyQt5.QtWidgets import (
     QMessageBox,
 )
 
+from PyQt5.QtWidgets import QWidget
 
-class MainWindow(QWidget):
-    def __init__(self):
+class UploadWindow(QWidget):
+    def __init__(self, username):
         super().__init__()
         self.setWindowTitle("Drovis - 영상 분석")
         self.resize(1000, 600)
