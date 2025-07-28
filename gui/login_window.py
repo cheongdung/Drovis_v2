@@ -24,7 +24,7 @@ class LoginWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("로그인")
-        self.setFixedSize(300, 200)
+        self.setFixedSize(600, 300)
 
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
