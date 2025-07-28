@@ -1,11 +1,11 @@
 # core/models/analysis_DB.py
-from core.db import get_connection
+from core.db import get_analysis_connection
 
 def create_analysis_table():
-    conn = get_connection()
+    conn = get_analysis_connection()
     cur = conn.cursor()
     cur.execute("""
-        CREATE TABLE analysis (
+        CREATE TABLE IF NOT EXISTS analysis (
 			    id INTEGER PRIMARY KEY AUTOINCREMENT,
 			    user_id TEXT NOT NULL,
 			    filename TEXT NOT NULL,
