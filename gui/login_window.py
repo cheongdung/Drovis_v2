@@ -9,12 +9,13 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = os.path.dirname(CURRENT_DIR)
 sys.path.append(PARENT_DIR)
 
-# upload_window.py의 UploadWindow 클래스 가져오기
+# 외부 모듈 import
 from gui.upload_window import UploadWindow
+from core.services.auth import verify_user
 
 # PyQt5 위젯 모듈들
 from PyQt5.QtWidgets import (
-    QMainWindow, QWidget, QLabel, QLineEdit, QPushButton,
+    QMainWindow, QWidget, QLineEdit, QPushButton,
     QVBoxLayout, QMessageBox, QApplication
 )
 
@@ -24,7 +25,7 @@ class LoginWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("로그인")
-        self.setFixedSize(300, 200)
+        self.setFixedSize(600, 300)
 
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
@@ -51,15 +52,26 @@ class LoginWindow(QMainWindow):
     def try_login(self):
         username = self.username_input.text()
         password = self.password_input.text()
+        
+        is_valid, role = verify_user(username, password)
 
+        if is_valid:
+            self.upload = UploadWindow(username)
+            self.upload.show()
+            self.close()
+        else:
+            QMessageBox.warning(self, "login failed", "Wrong id or password.")
+
+        '''
         # 간단한 인증 (실제로는 DB 또는 API 연동 가능)
         if username == "admin" and password == "1234":
             self.upload = UploadWindow(username)
             self.upload.show()
             self.close()
         else:
-            QMessageBox.warning(self, "로그인 실패", "아이디 또는 비밀번호가 잘못되었습니다.")
+            QMessageBox.warning(self, "login failed", "Wrong id or password")
 
+        '''
 
 # 실행 진입점
 if __name__ == "__main__":

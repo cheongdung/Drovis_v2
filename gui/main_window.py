@@ -35,7 +35,12 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout()
 
         welcome_label = QLabel("마약 드로퍼 탐지를 도와주는 Drovis입니다.")
+        # 1. 텍스트 중앙 정렬
+        welcome_label.setAlignment(Qt.AlignCenter)
+
+        # 2. 레이아웃 내에서 위젯 위치도 중앙 정렬
         layout.addWidget(welcome_label)
+        layout.setAlignment(welcome_label, Qt.AlignCenter)
 
         # 로그인 버튼
         login_btn = QPushButton("로그인")
