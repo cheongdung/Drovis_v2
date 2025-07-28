@@ -9,6 +9,7 @@ import os
 class HistoryWindow(QWidget):
     def __init__(self, history_file="data/history.json"):
         super().__init__()
+        self.username = username
         self.setWindowTitle("분석 기록")
         self.setGeometry(300, 200, 700, 500)
         self.history_file = history_file
