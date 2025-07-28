@@ -1,95 +1,61 @@
+import sys
 import os
-os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = r"C:\Users\김민경\OneDrive\바탕 화면\Proj_drovis\Drovis_v2-main\venv\Lib\site-packages\PyQt5\Qt5\plugins\platforms"
-
-
-
-# gui/main_window.py
-import random
-from datetime import datetime
 from PyQt5.QtWidgets import (
-    QApplication,
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-    QLabel,
-    QFileDialog,
-    QTableWidget,
-    QTableWidgetItem,
-    QMessageBox,
+    QApplication, QMainWindow, QWidget, QLabel,
+    QPushButton, QVBoxLayout
 )
 
+# 경로 문제 해결: 상위 경로에 Drovis_v2 등록
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(CURRENT_DIR)
+sys.path.append(PARENT_DIR)
 
-class MainWindow(QWidget):
-    def __init__(self):
+# 다른 창 import (Drovis_v2/gui/upload_window.py 등)
+from gui.upload_window import UploadWindow
+from gui.history_window import HistoryWindow
+
+class MainWindow(QMainWindow):
+    def __init__(self, username="김민경"):
         super().__init__()
-        self.setWindowTitle("Drovis - 영상 분석")
-        self.resize(1000, 600)
-        self.file_path = None
-        self.setup_ui()
+        self.username = username
+        self.setWindowTitle(f"Welcome, {self.username}")
+        self.setFixedSize(400, 300)
 
-    def setup_ui(self):
+        # 중앙 위젯
+        central_widget = QWidget()
         layout = QVBoxLayout()
 
-        upload_layout = QHBoxLayout()
-        self.upload_btn = QPushButton("영상 업로드")
-        self.upload_btn.clicked.connect(self.upload_file)
-        self.file_label = QLabel("업로드된 파일 없음")
-        upload_layout.addWidget(self.upload_btn)
-        upload_layout.addWidget(self.file_label)
-        layout.addLayout(upload_layout)
+        welcome_label = QLabel(f"{self.username}님, Drovis에 오신 것을 환영합니다!")
+        layout.addWidget(welcome_label)
 
-        self.analyze_btn = QPushButton("분석 시작")
-        self.analyze_btn.clicked.connect(self.start_analysis)
-        layout.addWidget(self.analyze_btn)
+        # 분석 업로드 버튼
+        upload_btn = QPushButton("영상 업로드 및 분석")
+        upload_btn.clicked.connect(self.open_upload_window)
+        layout.addWidget(upload_btn)
 
-        self.result_table = QTableWidget()
-        self.result_table.setColumnCount(4)
-        self.result_table.setHorizontalHeaderLabels(
-            ["파일명", "상태", "유사도 결과", "시간"]
-        )
-        layout.addWidget(self.result_table)
+        # 분석 기록 조회 버튼
+        history_btn = QPushButton("분석 기록 조회")
+        history_btn.clicked.connect(self.open_history_window)
+        layout.addWidget(history_btn)
 
-        self.setLayout(layout)
+        central_widget.setLayout(layout)
+        self.setCentralWidget(central_widget)
 
-    def upload_file(self):
-        file_path, _ = QFileDialog.getOpenFileName(
-            self, "영상 선택", "", "Video Files (*.mp4 *.avi)"
-        )
-        if file_path:
-            self.file_path = file_path
-            self.file_label.setText(os.path.basename(file_path))
+        # 창 초기화
+        self.upload_window = None
+        self.history_window = None
 
-    def start_analysis(self):
-        if not self.file_path:
-            QMessageBox.warning(self, "경고", "먼저 영상을 업로드하세요.")
-            return
+    def open_upload_window(self):
+        self.upload_window = UploadWindow(self.username)
+        self.upload_window.show()
 
-        similarity_score = round(random.uniform(0.3, 0.95), 2)
-
-        if similarity_score >= 0.8:
-            result = "상"
-        elif similarity_score >= 0.5:
-            result = "중"
-        else:
-            result = "하"
-
-        row = self.result_table.rowCount()
-        self.result_table.insertRow(row)
-        self.result_table.setItem(
-            row, 0, QTableWidgetItem(os.path.basename(self.file_path))
-        )
-        self.result_table.setItem(row, 1, QTableWidgetItem("완료"))
-        self.result_table.setItem(row, 2, QTableWidgetItem(result))
-        self.result_table.setItem(
-            row, 3, QTableWidgetItem(datetime.now().strftime("%Y-%m-%d %H:%M"))
-        )
+    def open_history_window(self):
+        self.history_window = HistoryWindow(self.username)
+        self.history_window.show()
 
 
-# 단독 실행용
+# 단독 실행 시 진입점
 if __name__ == "__main__":
-    import sys
-
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
