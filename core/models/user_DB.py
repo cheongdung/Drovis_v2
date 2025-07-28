@@ -1,8 +1,8 @@
 # core/models/user_DB.py
-from core.db import get_connection
+from core.db import get_user_connection
 
 def create_user_table():
-    conn = get_connection()
+    conn = get_user_connection()
     cur = conn.cursor()
     cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
