@@ -87,10 +87,20 @@ class MainWindow(QWidget):
 
 
 # 단독 실행용
+import os
+
 if __name__ == "__main__":
     import sys
-
+    from PyQt5.QtWidgets import QApplication
     app = QApplication(sys.argv)
+
+    # 현재 스크립트 기준 절대 경로로 QSS 불러오기
+    qss_path = os.path.join(os.path.dirname(__file__), "styles.qss")
+    with open(qss_path, "r", encoding="utf-8") as f:
+        app.setStyleSheet(f.read())
+
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())
+
+
