@@ -135,8 +135,9 @@ class UploadWindow(QWidget):
 
 
     def open_history_window(self):
-        self.history_window = HistoryWindow()
+        self.history_window = HistoryWindow(username=self.username)  # ← username 전달!
         self.history_window.show()
+
 
 
 # 단독 실행용
