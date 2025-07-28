@@ -9,7 +9,7 @@ import os
 class HistoryWindow(QWidget):
     def __init__(self, history_file="data/history.json"):
         super().__init__()
-        self.setWindowTitle("📊 분석 기록")
+        self.setWindowTitle("분석 기록")
         self.setGeometry(300, 200, 700, 500)
         self.history_file = history_file
 
@@ -18,7 +18,7 @@ class HistoryWindow(QWidget):
     def init_ui(self):
         layout = QVBoxLayout()
 
-        title = QLabel("📋 최근 분석 기록")
+        title = QLabel("최근 분석 기록")
         title.setStyleSheet("font-size: 20px; font-weight: bold; margin-bottom: 15px;")
         layout.addWidget(title)
 
