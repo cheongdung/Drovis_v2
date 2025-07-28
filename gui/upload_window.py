@@ -1,6 +1,13 @@
 import os
+import sys
+
+# Qt 플랫폼 환경변수
 os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = r"C:\Users\김민경\OneDrive\바탕 화면\Proj_drovis\Drovis_v2-main\venv\Lib\site-packages\PyQt5\Qt5\plugins\platforms"
 
+# 현재 경로 기반으로 상위 폴더 추가
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(CURRENT_DIR)
+sys.path.append(PARENT_DIR)
 
 
 # gui/main_window.py

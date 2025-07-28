@@ -1,74 +1,69 @@
+import os
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox
-from PyQt5.QtCore import QFile, QTextStream
 
-class LoginWindow(QWidget):
+# Qt 플랫폼 플러그인 경로 명시 (OneDrive + PyQt5 Qt5 구조)
+os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = r"C:\Users\김민경\OneDrive\바탕 화면\Proj_drovis\Drovis_v2-main\venv\Lib\site-packages\PyQt5\Qt5\plugins\platforms"
+
+# import 경로 처리 (상위 폴더를 sys.path에 추가)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(CURRENT_DIR)
+sys.path.append(PARENT_DIR)
+
+# upload_window.py의 UploadWindow 클래스 가져오기
+from gui.upload_window import UploadWindow
+
+# PyQt5 위젯 모듈들
+from PyQt5.QtWidgets import (
+    QMainWindow, QWidget, QLabel, QLineEdit, QPushButton,
+    QVBoxLayout, QMessageBox, QApplication
+)
+
+
+# 로그인 창 클래스
+class LoginWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("로그인")
-        self.setGeometry(100, 100, 600, 400)
+        self.setFixedSize(300, 200)
 
-        self.apply_stylesheet("Drovis_v2/gui/styles.qss")  # 상대경로
+        self.central_widget = QWidget()
+        self.setCentralWidget(self.central_widget)
 
-    
-
-
-        # 레이아웃 설정
         layout = QVBoxLayout()
 
-        layout.setContentsMargins(40, 40, 40, 40)  # 왼, 위, 오, 아래 여백
-        layout.setSpacing(20)  # 위젯 간 여백
+        self.username_input = QLineEdit()
+        self.username_input.setPlaceholderText("아이디")
+        layout.addWidget(self.username_input)
 
-        # 아이디 입력
-        self.label_id = QLabel("아이디")
-        self.input_id = QLineEdit()
-        layout.addWidget(self.label_id)
-        layout.addWidget(self.input_id)
+        self.password_input = QLineEdit()
+        self.password_input.setPlaceholderText("비밀번호")
+        self.password_input.setEchoMode(QLineEdit.Password)
+        layout.addWidget(self.password_input)
 
-        # 비밀번호 입력
-        self.label_pw = QLabel("비밀번호")
-        self.input_pw = QLineEdit()
-        self.input_pw.setEchoMode(QLineEdit.Password)
-        layout.addWidget(self.label_pw)
-        layout.addWidget(self.input_pw)
+        self.login_button = QPushButton("로그인")
+        self.login_button.clicked.connect(self.try_login)
+        layout.addWidget(self.login_button)
 
-        # 로그인 버튼
-        self.btn_login = QPushButton("로그인")
-        self.btn_login.clicked.connect(self.handle_login)
-        layout.addWidget(self.btn_login)
+        self.central_widget.setLayout(layout)
 
-        self.setLayout(layout)
+        self.upload = None  # 업로드 창 핸들
 
-    def handle_login(self):
-        user_id = self.input_id.text()
-        user_pw = self.input_pw.text()
+    def try_login(self):
+        username = self.username_input.text()
+        password = self.password_input.text()
 
-        if user_id == "admin" and user_pw == "1234":
-            QMessageBox.information(self, "성공", "로그인 성공!")
+        # 간단한 인증 (실제로는 DB 또는 API 연동 가능)
+        if username == "admin" and password == "1234":
+            self.upload = UploadWindow(username)
+            self.upload.show()
+            self.close()
         else:
-            QMessageBox.warning(self, "실패", "아이디 또는 비밀번호가 틀렸습니다.")
-
-    def apply_stylesheet(self, path):
-        file = QFile(path)
-        if file.open(QFile.ReadOnly | QFile.Text):
-            stream = QTextStream(file)
-            self.setStyleSheet(stream.readAll())
+            QMessageBox.warning(self, "로그인 실패", "아이디 또는 비밀번호가 잘못되었습니다.")
 
 
-
-    def apply_stylesheet(self, path):
-        file = QFile(path)
-        if file.open(QFile.ReadOnly | QFile.Text):
-            stream = QTextStream(file)
-            self.setStyleSheet(stream.readAll())
-        else:
-            print(f"❌ 스타일시트 로드 실패: {path}")
-
-
-# 실행 부분
+# 실행 진입점
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = LoginWindow()
-    window.show()
+    login = LoginWindow()
+    login.show()
     sys.exit(app.exec_())
-
