@@ -1,10 +1,10 @@
 # core/services/auth.py
 import sqlite3
 import bcrypt
-from core.db import get_connection
+from core.db import get_user_connection
 
 def register_user(username, password, email, role='user'):
-    conn = get_connection()
+    conn = get_user_connection()
     cur = conn.cursor()
     hashed_pw = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
     try:
@@ -18,7 +18,7 @@ def register_user(username, password, email, role='user'):
         conn.close()
 
 def verify_user(username, password):
-    conn = get_connection()
+    conn = get_user_connection()
     cur = conn.cursor()
     cur.execute("SELECT password, role FROM users WHERE username = ?", (username,))
     row = cur.fetchone()
