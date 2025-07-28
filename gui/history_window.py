@@ -29,6 +29,16 @@ class HistoryWindow(QWidget):
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         layout.addWidget(self.table)
 
+        # 뒤로가기 버튼
+        btn_back = QPushButton("뒤로 가기")
+        btn_back.clicked.connect(self.go_back_to_upload)
+        layout.addWidget(btn_back)
+
+        # 로그아웃 버튼
+        btn_logout = QPushButton("로그아웃")
+        btn_logout.clicked.connect(self.logout_to_main)
+        layout.addWidget(btn_logout)
+
         # 버튼 영역
         btn_close = QPushButton("닫기")
         btn_close.clicked.connect(self.close)
@@ -79,6 +89,19 @@ class HistoryWindow(QWidget):
                 os.remove(self.history_file)
             self.table.setRowCount(0)
             QMessageBox.information(self, "삭제됨", "기록이 삭제되었습니다.")
+
+    def go_back_to_upload(self):
+        from gui.upload_window import UploadWindow  # 순환 import 방지용
+        self.upload_window = UploadWindow(username=self.username)
+        self.upload_window.show()
+        self.close()
+
+    def logout_to_main(self):
+        from gui.main_window import MainWindow  # 순환 import 방지용
+        self.main_window = MainWindow()
+        self.main_window.show()
+        self.close()
+
 if __name__ == "__main__":
     import sys
     from PyQt5.QtWidgets import QApplication
